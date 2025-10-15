@@ -1,14 +1,27 @@
-import { DTO, Entity, Lesson, Raw, Schema, Student, Teacher} from "datasource/entity/entities";
+import { DTO, Entity, Raw, Schema} from "datasource/entity/entities";
 import { requireDB } from "datasource/database/database";
 import { Database } from "sqlite";
 import { HttpError, SQLiteError } from 'infra/error/error-classes';
 
-export type TableName = "student" | "teacher" | "lesson";
+import { Admin } from "datasource/entity/admin";
+import { Feedback } from "datasource/entity/Feedback";
+import { Partida } from "datasource/entity/Partida";
+import { Ponto } from "datasource/entity/ponto";
+import { Rota } from "datasource/entity/rota";
+import { Admin_Rota } from "datasource/entity/Admin_Rota";
+import { Rota_Ponto } from "datasource/entity/Rota_Ponto";
+
+export type TableName = "admin" | "admin_rota" | "rota" 
+    | "rota_ponto" | "ponto" | "partida" | "feedback";
 
 const schemas = {
-    student: Student.schema,
-    teacher: Teacher.schema,
-    lesson: Lesson.schema,
+    admin: Admin.schema,
+    admin_rota: Admin_Rota.schema,
+    rota: Rota.schema,
+    rota_ponto: Rota_Ponto.schema,
+    ponto: Ponto.schema,
+    partida: Partida.schema,
+    feedback: Feedback.schema,
 }
 
 export class GenericRepository<T extends Entity> {

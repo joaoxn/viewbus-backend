@@ -1,6 +1,7 @@
 import {TableName} from "datasource/repository/generic-repository";
 
-export { Raw, DTO, Schema, Entity, EntityConstructor, Student, Teacher, Lesson };
+export { Raw, DTO, Schema, Entity, EntityConstructor };
+export { assertPropertiesByValueAndPrimitiveType }
 
 type Raw<T> =
     T extends Function ? never :
@@ -125,93 +126,5 @@ abstract class Entity {
 
     static assertValidDTO(_obj: unknown) {
         throw new Error("Method not implemented! Use derived class");
-    }
-}
-
-class Student extends Entity {
-    name: string;
-    age: number;
-    email: string;
-    phone: string | undefined;
-
-    static readonly tableName = "student";
-    static schema: Schema<Student> = {
-        name: 'string',
-        age: 'number',
-        email: 'string',
-        phone: ['string', 'undefined']
-    }
-
-    constructor(name: string, age: number, email: string, phone?: string, id?: number) {
-        super(id);
-        this.name = name;
-        this.age = age;
-        this.email = email;
-        this.phone = phone;
-    }
-
-    class() {
-        return Student;
-    }
-
-    static fromObject(id: number, obj: DTO<Student>) {
-        return new Student(obj.name, obj.age, obj.email, obj.phone, id);
-    }
-
-    static assertValidDTO(obj: unknown): asserts obj is DTO<Student> {
-        assertPropertiesByValueAndPrimitiveType(obj, Student.schema);
-    }
-}
-
-
-class Teacher extends Entity {
-    name: string;
-
-    static readonly tableName = "teacher";
-    static schema: Schema<Teacher> = {
-        name: 'string'
-    }
-
-    constructor(name: string, id?: number) {
-        super(id);
-        this.name = name;
-    }
-
-    class() {
-        return Teacher;
-    }
-
-    static fromObject(id: number, obj: DTO<Teacher>) {
-        return new Teacher(obj.name, id);
-    }
-
-    static assertValidDTO(obj: unknown): asserts obj is DTO<Teacher> {
-        assertPropertiesByValueAndPrimitiveType(obj, Teacher.schema);
-    }
-}
-
-class Lesson extends Entity {
-    name: string;
-
-    static readonly tableName = "lesson";
-    static schema: Schema<Lesson> = {
-        name: 'string'
-    }
-
-    constructor(name: string, id?: number) {
-        super(id);
-        this.name = name;
-    }
-
-    class() {
-        return Lesson;
-    }
-
-    static fromObject(id: number, obj: DTO<Lesson>) {
-        return new Lesson(obj.name, id);
-    }
-
-    static assertValidDTO(obj: unknown): asserts obj is DTO<Lesson> {
-        assertPropertiesByValueAndPrimitiveType(obj, Lesson.schema);
     }
 }

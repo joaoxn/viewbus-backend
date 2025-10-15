@@ -5,7 +5,7 @@ import {loggerLevel, LogLevel} from '@logger';
 import {jsonParser} from 'middleware/jsonParser';
 import {enableLoggedResponses, initRequestLogger} from 'middleware/logs';
 import {errorHandler, jsonParserHandler, listenUnhandledRejections} from 'infra/error/error-handler';
-import { StudentRouter } from 'router/student-router';
+import { AdminRouter } from 'router/admin-router';
 
 import * as DevKit from "./.dev/develop-kit";
 
@@ -27,7 +27,7 @@ const PORT = 8800;
 
     app.use(initRequestLogger);
     app.use(enableLoggedResponses);
-    app.use('/students', (await StudentRouter.new()).router);
+    app.use('/admins', (await AdminRouter.new()).router);
     app.all('/{*path}', (req, _res, next) => {
         next(new HttpError(404, `Router with Path '${req.originalUrl}' Not Found`));
     });
