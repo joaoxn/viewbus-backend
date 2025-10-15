@@ -1,13 +1,15 @@
 import express from 'express';
 import {HttpError} from 'infra/error/error-classes';
 
-import {loggerLevel, LogLevel} from '@logger';
+import {log, loggerLevel, LogLevel} from '@logger';
 import {jsonParser} from 'middleware/jsonParser';
 import {enableLoggedResponses, initRequestLogger} from 'middleware/logs';
 import {errorHandler, jsonParserHandler, listenUnhandledRejections} from 'infra/error/error-handler';
 import { AdminRouter } from 'router/admin-router';
 
 import * as DevKit from "./.dev/develop-kit";
+
+require('dotenv').config();
 
 // Set Level before executing other dependencies that might use the logger
 loggerLevel(LogLevel.INFO);
@@ -18,7 +20,7 @@ DevKit.projectStatus();
 listenUnhandledRejections();
 
 const app = express();
-const PORT = 8800;
+const PORT = process.env.PORT || 8800;
 
 (async () => {
 
@@ -27,7 +29,7 @@ const PORT = 8800;
 
     app.use(initRequestLogger);
     app.use(enableLoggedResponses);
-    app.use('/admins', (await AdminRouter.new()).router);
+    app.use('/admin', (await AdminRouter.new()).router);
     app.all('/{*path}', (req, _res, next) => {
         next(new HttpError(404, `Router with Path '${req.originalUrl}' Not Found`));
     });
