@@ -8,6 +8,7 @@ import {errorHandler, jsonParserHandler, listenUnhandledRejections} from 'infra/
 import { AdminRouter } from 'router/admin-router';
 
 import * as DevKit from "./.dev/develop-kit";
+import { RotaRouter } from 'router/rota-router';
 
 require('dotenv').config();
 
@@ -30,6 +31,8 @@ const PORT = process.env.PORT || 8800;
     app.use(initRequestLogger);
     app.use(enableLoggedResponses);
     app.use('/admin', (await AdminRouter.new()).router);
+    app.use('/rota', (await RotaRouter.new()).router);
+    
     app.all('/{*path}', (req, _res, next) => {
         next(new HttpError(404, `Router with Path '${req.originalUrl}' Not Found`));
     });
