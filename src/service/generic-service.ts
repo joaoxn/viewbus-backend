@@ -3,14 +3,14 @@ import { HttpError } from "infra/error/error-classes";
 import {GenericRepository} from "datasource/repository/generic-repository";
 
 export class GenericService<T extends Entity> {
-	constructor(private EntityConstructor: EntityConstructor<T>, private Repository: GenericRepository<T>) {}
+	constructor(private EntityConstructor: EntityConstructor<T>, protected repository: GenericRepository<T>) {}
 
 	async getAll(): Promise<Raw<T>[]> {
-		return await this.Repository.getAll();
+		return await this.repository.getAll();
 	}
 
 	async get(id: number): Promise<Raw<T>> {
-		const entity = await this.Repository.get(id);
+		const entity = await this.repository.get(id);
 
 		if (!entity)
 			throw new HttpError(404, `No Entity found with ID '${id}'`);
@@ -19,14 +19,14 @@ export class GenericService<T extends Entity> {
 	}
 
 	async add(entityDTO: DTO<T>): Promise<Raw<T>> {
-		return await this.Repository.save(entityDTO);
+		return await this.repository.save(entityDTO);
 	}
 
 	async put(id: number, entityDTO: DTO<T>): Promise<Raw<T>> {
-		return await this.Repository.replace(id, entityDTO);
+		return await this.repository.replace(id, entityDTO);
 	}
 
 	async remove(id: number) {
-		return await this.Repository.delete(id);
+		return await this.repository.delete(id);
 	}
 }
