@@ -3,16 +3,13 @@ import { requireDB } from "datasource/database/database";
 import { Database } from "sqlite";
 import { HttpError, SQLiteError } from 'infra/error/error-classes';
 
-import { Admin } from "datasource/entity/admin";
+import { Admin } from "datasource/entity/Admin";
 import { Feedback } from "datasource/entity/Feedback";
 import { Partida } from "datasource/entity/Partida";
-import { Ponto } from "datasource/entity/ponto";
-import { Rota } from "datasource/entity/rota";
+import { Ponto } from "datasource/entity/Ponto";
+import { Rota } from "datasource/entity/Rota";
 import { Admin_Rota } from "datasource/entity/Admin_Rota";
 import { Rota_Ponto } from "datasource/entity/Rota_Ponto";
-
-export type TableName = "admin" | "admin_rota" | "rota" 
-    | "rota_ponto" | "ponto" | "partida" | "feedback";
 
 const schemas = {
     admin: Admin.schema,
@@ -22,12 +19,14 @@ const schemas = {
     ponto: Ponto.schema,
     partida: Partida.schema,
     feedback: Feedback.schema,
-}
+};
+
+export type TableName = keyof typeof schemas;
 
 export class GenericRepository<T extends Entity> {
-    readonly schema: Schema<Entity>;
+    readonly schema: typeof schemas[TableName];
 
-    constructor(private readonly db: Database, private readonly tableName: TableName) {
+    constructor(protected readonly db: Database, protected readonly tableName: TableName) {
         this.db = db;
         this.schema = schemas[tableName];
     }
