@@ -2,16 +2,15 @@ import { assertPropertiesByValueAndPrimitiveType, DTO, Entity, Schema } from "./
 
 
 export class Ponto extends Entity {
-    endereco: string;
-
     static readonly tableName = "ponto";
     static schema: Schema<Ponto> = {
         endereco: 'string',
     }
 
-    constructor(endereco: string, id?: number) {
+    constructor(
+        public endereco: string, 
+        id?: number) {
         super(id);
-        this.endereco = endereco;
     }
 
     class() {

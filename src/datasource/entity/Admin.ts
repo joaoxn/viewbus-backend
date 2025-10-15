@@ -2,10 +2,6 @@ import { assertPropertiesByValueAndPrimitiveType, DTO, Entity, Schema } from "./
 
 
 export class Admin extends Entity {
-    nome: string;
-    email: string;
-    password: string;
-
     static readonly tableName = "admin";
     static schema: Schema<Admin> = {
         nome: 'string',
@@ -13,11 +9,12 @@ export class Admin extends Entity {
         password: 'string'
     }
 
-    constructor(name: string, email: string, password: string, id?: number) {
+    constructor(
+        public nome: string, 
+        public email: string, 
+        public password: string, 
+        id?: number) {
         super(id);
-        this.nome = name;
-        this.email = email;
-        this.password = password;
     }
 
     class() {

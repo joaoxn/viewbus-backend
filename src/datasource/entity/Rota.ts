@@ -2,11 +2,6 @@ import { assertPropertiesByValueAndPrimitiveType, DTO, Entity, Schema } from "./
 
 
 export class Rota extends Entity {
-    codigo: number;
-    origem: string;
-    destino: string;
-    via: string | undefined;
-
     static readonly tableName = "rota";
     static schema: Schema<Rota> = {
         codigo: 'number',
@@ -15,7 +10,12 @@ export class Rota extends Entity {
         via: ['string', 'undefined']
     }
 
-    constructor(codigo: number, origem: string, destino: string, via?: string, id?: number) {
+    constructor(
+        public codigo: number, 
+        public origem: string, 
+        public destino: string, 
+        public via: string | undefined, 
+        id?: number) {
         super(id);
         this.codigo = codigo;
         this.origem = origem;

@@ -2,19 +2,17 @@ import { assertPropertiesByValueAndPrimitiveType, DTO, Entity, Schema } from "./
 
 
 export class Rota_Ponto extends Entity {
-    rota_id: number;
-    ponto_id: number;
-
     static readonly tableName = "rota_ponto";
     static schema: Schema<Rota_Ponto> = {
-        rota_id: 'number',
-        ponto_id: 'number',
+        rotaId: 'number',
+        pontoId: 'number',
     }
 
-    constructor(name: number, ponto_id: number, id?: number) {
+    constructor(
+        public rotaId: number, 
+        public pontoId: number, 
+        id?: number) {
         super(id);
-        this.rota_id = name;
-        this.ponto_id = ponto_id;
     }
 
     class() {
@@ -22,7 +20,7 @@ export class Rota_Ponto extends Entity {
     }
 
     static fromObject(id: number, obj: DTO<Rota_Ponto>) {
-        return new Rota_Ponto(obj.rota_id, obj.ponto_id, id);
+        return new Rota_Ponto(obj.rotaId, obj.pontoId, id);
     }
 
     static assertValidDTO(obj: unknown): asserts obj is DTO<Rota_Ponto> {

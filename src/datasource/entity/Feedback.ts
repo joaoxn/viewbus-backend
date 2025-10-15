@@ -2,25 +2,22 @@ import { assertPropertiesByValueAndPrimitiveType, DTO, Entity, Schema } from "./
 
 
 export class Feedback extends Entity {
-    avaliacao: number;
-    nome: string;
-    rota_id: number;
-    mensagem: string | undefined;
 
     static readonly tableName = "feedback";
     static schema: Schema<Feedback> = {
         avaliacao: 'string',
         nome: 'string',
-        rota_id: 'number',
+        rotaId: 'number',
         mensagem: ['string', 'undefined'],
     }
 
-    constructor(avaliacao: number, nome: string, rota_id: number, mensagem?: string, id?: number) {
+    constructor(
+        public avaliacao: number, 
+        public nome: string, 
+        public rotaId: number, 
+        public mensagem: string | undefined, 
+        id?: number) {
         super(id);
-        this.avaliacao = avaliacao;
-        this.nome = nome;
-        this.rota_id = rota_id;
-        this.mensagem = mensagem;
     }
 
     class() {
@@ -28,7 +25,7 @@ export class Feedback extends Entity {
     }
 
     static fromObject(id: number, obj: DTO<Feedback>) {
-        return new Feedback(obj.avaliacao, obj.nome, obj.rota_id, obj.mensagem, id);
+        return new Feedback(obj.avaliacao, obj.nome, obj.rotaId, obj.mensagem, id);
     }
 
     static assertValidDTO(obj: unknown): asserts obj is DTO<Feedback> {
