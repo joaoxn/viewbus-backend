@@ -2,3 +2,5 @@
 /package-lock.json
 sqlite.db
 .env
+/.idea
+/.vscode

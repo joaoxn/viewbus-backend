@@ -1,23 +1,72 @@
-export {HttpError, HttpErrorHandler, RawSQLiteError, SQLiteError};
+export {HttpError, HttpErrorHandler, RawDatabaseError, DatabaseError};
 
-interface RawSQLiteError extends Error {
-    errno: number;
+interface RawDatabaseError extends Error {
+    length: number;
+    severity: string;
     code: string;
+    detail?: string;
+    hint?: string;
+    position?: string;
+    internalPosition?: string;
+    internalQuery?: string;
+    where?: string;
+    schema?: string;
+    table?: string;
+    column?: string;
+    dataType?: string;
+    constraint?: string;
+    file: string;
+    line: string;
+    routine: string;
 }
 
-class SQLiteError extends Error implements RawSQLiteError {
-    errno: number;
+class DatabaseError extends Error implements RawDatabaseError {
+    length: number;
+    severity: string;
     code: string;
+    detail?: string;
+    hint?: string;
+    position?: string;
+    internalPosition?: string;
+    internalQuery?: string;
+    where?: string;
+    schema?: string;
+    table?: string;
+    column?: string;
+    dataType?: string;
+    constraint?: string;
+    file: string;
+    line: string;
+    routine: string;
 
-    constructor(rawError: RawSQLiteError) {
+    constructor(rawError: RawDatabaseError) {
         super(rawError.message);
-        this.errno = rawError.errno;
+
+        // Assign all properties from rawError to this instance
+        this.length = rawError.length;
+        this.severity = rawError.severity;
         this.code = rawError.code;
-        this.name = 'SQLiteError';
+        this.detail = rawError.detail;
+        this.hint = rawError.hint;
+        this.position = rawError.position;
+        this.internalPosition = rawError.internalPosition;
+        this.internalQuery = rawError.internalQuery;
+        this.where = rawError.where;
+        this.schema = rawError.schema;
+        this.table = rawError.table;
+        this.column = rawError.column;
+        this.dataType = rawError.dataType;
+        this.constraint = rawError.constraint;
+        this.file = rawError.file;
+        this.line = rawError.line;
+        this.routine = rawError.routine;
     }
 
-    static isRawSQLiteError(error: Error): error is RawSQLiteError {
-        return 'errno' in error && 'code' in error;
+    static isRawDatabaseError(error: Error): error is RawDatabaseError {
+        for (const key in this) {
+            if (!(key in error)) return false;
+        }
+        return true;
     }
 }
 
@@ -39,76 +88,63 @@ class HttpError extends Error {
                 + ` Cause: ` + this.message, this);
     }
 
-    static fromSQLiteError(error: SQLiteError | RawSQLiteError): HttpError {
-        const sqliteError = error instanceof SQLiteError ? error : new SQLiteError(error);
+    static fromDatabaseError(error: DatabaseError | RawDatabaseError): HttpError {
+        const databaseError = error instanceof DatabaseError ? error : new DatabaseError(error);
 
-        switch (sqliteError.code) {
+        switch (databaseError.code) {
             // Constraint violations (conflicts with existing data)
-            case 'SQLITE_CONSTRAINT':
-            case 'SQLITE_CONSTRAINT_UNIQUE':
-            case 'SQLITE_CONSTRAINT_PRIMARYKEY':
-                return new HttpError(409, 'Resource conflict: ' + sqliteError.message, sqliteError);
-
-            // Foreign key constraints
-            case 'SQLITE_CONSTRAINT_FOREIGNKEY':
-                return new HttpError(409, 'Foreign key constraint violation: ' + sqliteError.message, sqliteError);
-
-            // Check constraints
-            case 'SQLITE_CONSTRAINT_CHECK':
-                return new HttpError(400, 'Check constraint failed: ' + sqliteError.message, sqliteError);
-
-            // Not null constraints
-            case 'SQLITE_CONSTRAINT_NOTNULL':
-                return new HttpError(400, 'Required field missing: ' + sqliteError.message, sqliteError);
+            case '23505': // unique_violation
+                return new HttpError(409, 'Unique constraint violation: ' + databaseError.message, databaseError);
+            case '23503': // foreign_key_violation
+                return new HttpError(409, 'Foreign key constraint violation: ' + databaseError.message, databaseError);
+            case '23514': // check_violation
+                return new HttpError(400, 'Check constraint violation: ' + databaseError.message, databaseError);
+            case '23502': // not_null_violation
+                return new HttpError(400, 'Not-null constraint violation: ' + databaseError.message, databaseError);
 
             // Syntax/query errors
-            case 'SQLITE_ERROR':
-                return new HttpError(500, 'Database query error: ' + sqliteError.message, sqliteError);
+            case '42601': // syntax_error
+                return new HttpError(400, 'Syntax error in SQL query: ' + databaseError.message, databaseError);
+            case '42P01': // undefined_table
+                return new HttpError(404, 'Table not found: ' + databaseError.message, databaseError);
+            case '42703': // undefined_column
+                return new HttpError(404, 'Column not found: ' + databaseError.message, databaseError);
 
             // Authorization errors
-            case 'SQLITE_AUTH':
-            case 'SQLITE_PERM':
-                return new HttpError(403, 'Database permission denied: ' + sqliteError.message, sqliteError);
+            case '42501': // insufficient_privilege
+                return new HttpError(403, 'Insufficient privileges: ' + databaseError.message, databaseError);
 
-            // Resource not found
-            case 'SQLITE_NOTFOUND':
-                return new HttpError(404, 'Resource not found: ' + sqliteError.message, sqliteError);
+            // Database integrity errors
+            case '40001': // serialization_failure
+                return new HttpError(503, 'Transaction serialization failure: ' + databaseError.message, databaseError);
 
-            // Database is busy or locked
-            case 'SQLITE_BUSY':
-            case 'SQLITE_LOCKED':
-                return new HttpError(503, 'Database is currently unavailable: ' + sqliteError.message, sqliteError);
+            // Resource limits
+            case '53200': // out_of_memory
+                return new HttpError(507, 'Out of memory: ' + databaseError.message, databaseError);
+            case '53300': // too_many_connections
+                return new HttpError(503, 'Too many connections: ' + databaseError.message, databaseError);
+            case '53100': // disk_full
+                return new HttpError(507, 'Disk is full: ' + databaseError.message, databaseError);
 
-            // Database corruption or IO errors
-            case 'SQLITE_CORRUPT':
-            case 'SQLITE_IOERR':
-            case 'SQLITE_NOTADB':
-                return new HttpError(500, 'Database integrity error: ' + sqliteError.message, sqliteError);
-
-            // Out of memory or quota
-            case 'SQLITE_NOMEM':
-            case 'SQLITE_FULL':
-            case 'SQLITE_TOOBIG':
-                return new HttpError(507, 'Database resource limit exceeded: ' + sqliteError.message, sqliteError);
-
-            // Read-only database
-            case 'SQLITE_READONLY':
-                return new HttpError(403, 'Database is read-only: ' + sqliteError.message, sqliteError);
+            // Read-only violations
+            case '25006': // read_only_sql_transaction
+                return new HttpError(403, 'Attempted to write to a read-only database: ' + databaseError.message, databaseError);
 
             // Operation aborted or interrupted
-            case 'SQLITE_ABORT':
-            case 'SQLITE_INTERRUPT':
-                return new HttpError(500, 'Database operation aborted: ' + sqliteError.message, sqliteError);
+            case '57014': // query_canceled
+                return new HttpError(500, 'Query execution was canceled: ' + databaseError.message, databaseError);
+            case '55P03': // lock_not_available
+                return new HttpError(503, 'Database resource is temporarily unavailable: ' + databaseError.message, databaseError);
 
             // Misconfiguration
-            case 'SQLITE_MISUSE':
-            case 'SQLITE_MISMATCH':
-                return new HttpError(500, 'Database API misuse: ' + sqliteError.message, sqliteError);
-            case 'SQLITE_CANTOPEN':
-                return new HttpError(500, 'Cannot open database: ' + sqliteError.message, sqliteError);
+            case '58P01': // undefined_file
+                return new HttpError(500, 'Required file is missing: ' + databaseError.message, databaseError);
+            case 'XX000': // internal_error
+                return new HttpError(500, 'Internal database error: ' + databaseError.message, databaseError);
 
+            // Default case for unknown errors
             default:
-                return new HttpError(500, 'Unknown SQLite Error: ' + sqliteError.message, sqliteError);
+                return new HttpError(500, 'Unknown PostgreSQL Error: ' + databaseError.message, databaseError);
         }
     }
 

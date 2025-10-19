@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as logger from '@logger';
-import {HttpError, HttpErrorHandler, SQLiteError} from './error-classes';
+import {HttpError, HttpErrorHandler, DatabaseError} from './error-classes';
 
 export function jsonParserHandler(err: unknown, _req: Request, _res: Response, _next: NextFunction) {
 	if (err instanceof SyntaxError && 'body' in err)
@@ -27,8 +27,8 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
 		? err
 		: !(err instanceof Error)
 			? new HttpError(500)
-			: SQLiteError.isRawSQLiteError(err)
-				? HttpError.fromSQLiteError(err)
+			: DatabaseError.isRawDatabaseError(err)
+				? HttpError.fromDatabaseError(err)
 				: new HttpError(500, err.message, err);
 
 	const handler = new HttpErrorHandler(httpError);

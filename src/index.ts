@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 import express from 'express';
 import {HttpError} from 'infra/error/error-classes';
 
@@ -9,8 +11,6 @@ import { AdminRouter } from 'router/admin-router';
 
 import * as DevKit from "./.dev/develop-kit";
 import { RotaRouter } from 'router/rota-router';
-
-require('dotenv').config();
 
 // Set Level before executing other dependencies that might use the logger
 loggerLevel(LogLevel.INFO);
