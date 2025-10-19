@@ -5,11 +5,7 @@ import { AdminService } from 'service/admin-service';
 
 
 export class AdminController extends GenericController<Admin> {
-	constructor(service: AdminService) {
+	constructor(service: AdminService = new AdminService()) {
 		super(Admin, service);
-	}
-
-	static async new() {
-		return new AdminController(await AdminService.new());
 	}
 }

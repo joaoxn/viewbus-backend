@@ -6,12 +6,8 @@ import { RotaService } from 'service/rota-service';
 
 
 export class RotaController extends GenericController<Rota> {
-    constructor(service: RotaService) {
+    constructor(service: RotaService = new RotaService()) {
         super(Rota, service);
-    }
-
-    static async new() {
-        return new RotaController(await RotaService.new());
     }
 
     async getByAdmin(req: any, res: any) { //! TODO

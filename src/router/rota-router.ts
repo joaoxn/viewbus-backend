@@ -5,8 +5,8 @@ import { GenericRouter } from 'router/generic-router';
 
 
 export class RotaRouter extends GenericRouter<Rota> {
-    static async new() {
-        return new RotaRouter(await RotaController.new());
+    constructor(controller: RotaController = new RotaController()) {
+        super(controller);
     }
 
     protected setRoutes(): void {
