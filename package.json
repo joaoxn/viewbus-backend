@@ -14,5 +14,11 @@
     "@types/node": "^24.7.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^17.2.3",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3"
   }
 }
