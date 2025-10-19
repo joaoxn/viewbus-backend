@@ -3,11 +3,7 @@ import { GenericService } from "./generic-service";
 import { GenericRepository } from 'datasource/repository/generic-repository';
 
 export class AdminService extends GenericService<Admin> {
-    constructor(repository: GenericRepository<Admin>) {
+    constructor(repository: GenericRepository<Admin> = new GenericRepository<Admin>('admin')) {
         super(Admin, repository);
-    }
-
-    static async new() {
-        return new AdminService(await GenericRepository.newGeneric<Admin>('admin'));
     }
 }

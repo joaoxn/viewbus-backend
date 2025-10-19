@@ -9,11 +9,12 @@ export class RotaRepository extends GenericRepository<Rota> {
 
     async getByAdmin(adminId: number) {
         console.log("TESTINGGGGGGGGGGGG")
-        return await pool.query(
+        const result = await pool.query(
             `SELECT rota.*
             FROM rota
-            INNER JOIN admin_rota ON rota.id = admin_rota.rotaId
-            WHERE admin_rota.adminId = ${adminId}`
+            INNER JOIN admin_rota ON rota.id = admin_rota.rota_id
+            WHERE admin_rota.admin_id = ${adminId}`
         );
+        return result.rows;
     }
 }
