@@ -8,10 +8,10 @@ export class RotaRepository extends GenericRepository<Rota> {
         super(db, 'rota');
     }
 
-    // static async new() { //TODO
-    //     const db = await requireDB();
-    //     return new RotaRepository(db);
-    // }
+    static async new() {
+        const db = await requireDB();
+        return new RotaRepository(db);
+    }
 
     async getByAdmin(adminId: number) {
         console.log("TESTINGGGGGGGGGGGG")

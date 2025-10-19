@@ -8,6 +8,10 @@ export class RotaService extends GenericService<Rota> {
     }
 
     static async new() {
-        // return new RotaService(await RotaRepository.new()); //TODO
+        return new RotaService(await RotaRepository.new());
+    }
+
+    async getByAdmin() {
+        
     }
 }

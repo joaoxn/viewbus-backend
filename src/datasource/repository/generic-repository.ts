@@ -24,14 +24,14 @@ const schemas = {
 export type TableName = keyof typeof schemas;
 
 export class GenericRepository<T extends Entity> {
-    readonly schema: typeof schemas[TableName];
+    readonly schema: Schema<T>;
 
     constructor(protected readonly db: Database, protected readonly tableName: TableName) {
         this.db = db;
-        this.schema = schemas[tableName];
+        this.schema = schemas[tableName] as Schema<T>;
     }
 
-    static async new<T extends Entity>(tableName: TableName) {
+    static async newGeneric<T extends Entity>(tableName: TableName) {
         const db = await requireDB();
         return new GenericRepository<T>(db, tableName);
     }

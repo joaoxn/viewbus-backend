@@ -8,6 +8,6 @@ export class AdminService extends GenericService<Admin> {
     }
 
     static async new() {
-        return new AdminService(await GenericRepository.new<Admin>('admin'));
+        return new AdminService(await GenericRepository.newGeneric<Admin>('admin'));
     }
 }
