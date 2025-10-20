@@ -2,7 +2,7 @@ import GenericController from 'controller/generic-controller';
 import Rota from 'datasource/entity/Rota';
 import type { Request, Response } from 'express';
 
-import { RotaService } from 'service/rota-service';
+import RotaService from 'service/rota-service';
 
 
 export default class RotaController extends GenericController<Rota, RotaService> {
