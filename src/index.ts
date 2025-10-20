@@ -2,16 +2,24 @@
 
 import dotenv from 'dotenv';
 import express from 'express'
+
+import * as logger from 'express-logger-functions';
+import { LogLevel } from 'express-logger-functions';
 import { auth } from 'middleware/auth';
+import { enableLoggedResponses, initRequestLogger } from 'middleware/logs';
+
 import * as authController from 'controller/auth-controller';
 import * as admin from 'controller/admin';
+
 dotenv.config();
 
-import auth from 'router/auth';
+logger.loggerLevel(LogLevel.INFO);
 
 const app = express();
 
 app.use(express.json());
+app.use(initRequestLogger);
+app.use(enableLoggedResponses);
 
 // Rotas
 app.use('', auth);
