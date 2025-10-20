@@ -2,18 +2,12 @@ import { Entity } from 'datasource/entity/entities';
 import { GenericController } from "controller/generic-controller";
 import { Router } from "express";
 
-export class GenericRouter<T extends Entity> {
-    public readonly router = Router();
-
-    constructor(protected controller: GenericController<T>) {
-        this.setRoutes();
-    }
-
-    protected setRoutes() {
-        this.router.get('', this.controller.getAll);
-        this.router.get('/:id', this.controller.get);
-        this.router.post('', this.controller.post);
-        this.router.put('/:id', this.controller.put);
-        this.router.delete('/:id', this.controller.remove);
-    }
+export default function genericRouter<T extends Entity>(controller: GenericController<T>) {
+    const router = Router();
+    router.get('', controller.getAll);
+    router.get('/:id', controller.get);
+    router.post('', controller.post);
+    router.put('/:id', controller.put);
+    router.delete('/:id', controller.remove);
+    return router;
 }

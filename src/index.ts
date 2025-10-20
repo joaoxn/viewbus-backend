@@ -10,10 +10,10 @@ import { auth } from 'infra/security/auth';
 import {jsonParser} from 'middleware/jsonParser';
 import {enableLoggedResponses, initRequestLogger} from 'middleware/logs';
 import {errorHandler, jsonParserHandler, listenUnhandledRejections} from 'infra/error/error-handler';
-import { AdminRouter } from 'router/admin-router';
+import adminRouter from 'router/admin-router';
 
 import * as DevKit from "./.dev/develop-kit";
-import { RotaRouter } from 'router/rota-router';
+import rotaRouter from 'router/rota-router';
 
 // Set Level before executing other dependencies that might use the logger
 loggerLevel(LogLevel.INFO);
@@ -33,8 +33,8 @@ app.use(jsonParserHandler);
 app.use(initRequestLogger);
 app.use(enableLoggedResponses);
 
-app.use('/admin', auth, new AdminRouter().router);
-app.use('/rota', auth, new RotaRouter().router);
+app.use('/admin', auth, adminRouter());
+app.use('/rota', auth, rotaRouter());
 
 app.all('/{*path}', (req, _res, next) => {
     next(new HttpError(404, `Router with Path '${req.originalUrl}' Not Found`));
