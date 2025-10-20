@@ -2,6 +2,7 @@
 
 require('dotenv').config();
 
+import AdminController from 'controller/admin-controller';
 import express from 'express';
 import {HttpError} from 'infra/error/error-classes';
 
@@ -16,7 +17,7 @@ import * as DevKit from "./.dev/develop-kit";
 import rotaRouter from 'router/rota-router';
 
 // Set Level before executing other dependencies that might use the logger
-loggerLevel(LogLevel.INFO);
+loggerLevel(LogLevel.TRACE);
 
 DevKit.setExecutionMode(DevKit.ExecutionMode.DEVELOPMENT);
 DevKit.projectStatus();
@@ -32,6 +33,9 @@ app.use(jsonParserHandler);
 
 app.use(initRequestLogger);
 app.use(enableLoggedResponses);
+
+app.post('/register', new AdminController().post);
+app.post('/login', new AdminController().login);
 
 app.use('/admin', auth, adminRouter());
 app.use('/rota', auth, rotaRouter());

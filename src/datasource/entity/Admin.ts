@@ -6,13 +6,13 @@ export default class Admin extends Entity {
     static schema: Schema<Admin> = {
         nome: 'string',
         email: 'string',
-        password: 'string'
+        senha: 'string'
     }
 
     constructor(
         public nome: string, 
         public email: string, 
-        public password: string, 
+        public senha: string,
         id?: number) {
         super(id);
     }
@@ -22,7 +22,7 @@ export default class Admin extends Entity {
     }
 
     static fromObject(id: number, obj: DTO<Admin>) {
-        return new Admin(obj.nome, obj.email, obj.password, id);
+        return new Admin(obj.nome, obj.email, obj.senha, id);
     }
 
     static assertValidDTO(obj: unknown): asserts obj is DTO<Admin> {

@@ -17,7 +17,9 @@ export function auth(req: Request, res: Response, next: NextFunction) {
 			throw new jwt.JsonWebTokenError("Invalid Token");
 
 		req.user = {
-			id: payload.id
+			id: payload.id,
+			nome: payload.nome,
+			email: payload.email
 		}
 
 		next();
