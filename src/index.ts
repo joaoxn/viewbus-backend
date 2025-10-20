@@ -1,6 +1,8 @@
 /// <reference path="types/express.d.ts" />
 
 import dotenv from 'dotenv';
+import { HttpError } from 'error/error-classes';
+import { errorHandler } from 'error/error-handler';
 import express from 'express'
 
 import * as logger from 'express-logger-functions';
@@ -22,13 +24,17 @@ app.use(initRequestLogger);
 app.use(enableLoggedResponses);
 
 // Rotas
-app.use('', auth);
 app.post('/register', authController.register);
 app.post('/login', authController.login);
 app.get('/admin', auth, admin.get);
 app.put('/admin', auth, admin.put);
 app.delete('/admin', auth, admin.remove);
 
+app.all('/{*path}', (req, _res, next) => {
+    next(new HttpError(404, `Router with Path '${req.originalUrl}' Not Found`));
+});
+
+app.use(errorHandler);
 
 // Inicialização
 const PORT = process.env.PORT || 8800;
