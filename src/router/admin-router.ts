@@ -1,5 +1,5 @@
-import { AdminController } from 'controller/admin-controller';
-import { RotaController } from 'controller/rota-controller';
+import AdminController from 'controller/admin-controller';
+import RotaController from 'controller/rota-controller';
 import Admin from 'datasource/entity/Admin';
 import genericRouter from 'router/generic-router';
 

@@ -1,4 +1,4 @@
-import { RotaController } from 'controller/rota-controller';
+import RotaController from 'controller/rota-controller';
 import Rota from 'datasource/entity/Rota';
 import genericRouter from 'router/generic-router';
 

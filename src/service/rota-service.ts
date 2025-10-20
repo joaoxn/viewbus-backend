@@ -1,8 +1,8 @@
 import Rota from "datasource/entity/Rota";
-import { GenericService } from "./generic-service";
-import { RotaRepository } from "datasource/repository/rota-repository";
+import GenericService from "./generic-service";
+import RotaRepository from "datasource/repository/rota-repository";
 
-export class RotaService extends GenericService<Rota, RotaRepository> {
+export default class RotaService extends GenericService<Rota, RotaRepository> {
     constructor(repository: RotaRepository = new RotaRepository()) {
         super(Rota, repository);
     }

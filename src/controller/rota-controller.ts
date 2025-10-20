@@ -1,12 +1,11 @@
-import { GenericController } from 'controller/generic-controller';
+import GenericController from 'controller/generic-controller';
 import Rota from 'datasource/entity/Rota';
-import { RotaRepository } from 'datasource/repository/rota-repository';
 import type { Request, Response } from 'express';
 
 import { RotaService } from 'service/rota-service';
 
 
-export class RotaController extends GenericController<Rota, RotaService> {
+export default class RotaController extends GenericController<Rota, RotaService> {
     constructor(service: RotaService = new RotaService()) {
         super(Rota, service);
     }

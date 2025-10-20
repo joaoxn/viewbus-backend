@@ -2,7 +2,7 @@ import pool from 'datasource/database/database';
 import Rota from "datasource/entity/Rota";
 import { GenericRepository } from "./generic-repository";
 
-export class RotaRepository extends GenericRepository<Rota> {
+export default class RotaRepository extends GenericRepository<Rota> {
     constructor() {
         super('rota');
     }

@@ -1,5 +1,5 @@
 import { Entity } from 'datasource/entity/entities';
-import { GenericController } from "controller/generic-controller";
+import GenericController from "controller/generic-controller";
 import { Router } from "express";
 
 export default function genericRouter<T extends Entity>(controller: GenericController<T>) {

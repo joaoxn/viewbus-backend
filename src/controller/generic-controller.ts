@@ -1,5 +1,5 @@
 import type {Request, Response} from "express";
-import type { GenericService } from 'service/generic-service';
+import type GenericService from 'service/generic-service';
 
 import { type DTO, Entity, type EntityConstructor, type Raw } from 'datasource/entity/entities';
 import {HttpError, HttpErrorHandler} from 'infra/error/error-classes';
@@ -22,7 +22,7 @@ type ControllerListResponse<T> = Response<HandledRawList<T>>;
 type ControllerResponse<T> = Response<HandledRaw<T>>;
 
 
-export class GenericController<T extends Entity, S extends GenericService<T> = GenericService<T>> {
+export default class GenericController<T extends Entity, S extends GenericService<T> = GenericService<T>> {
     constructor(private EntityConstructor: EntityConstructor<T>, protected service: S) {}
 
     protected idFromPathParams = (req: Request<{ id: string }>, _res: unknown) => {

@@ -1,8 +1,8 @@
 import { EntityConstructor, type DTO, type Entity, Raw } from "datasource/entity/entities";
 import { HttpError } from "infra/error/error-classes";
-import {GenericRepository} from "datasource/repository/generic-repository";
+import { GenericRepository } from "datasource/repository/generic-repository";
 
-export class GenericService<T extends Entity, R extends GenericRepository<T> = GenericRepository<T>> {
+export default class GenericService<T extends Entity, R extends GenericRepository<T> = GenericRepository<T>> {
 	constructor(private EntityConstructor: EntityConstructor<T>, protected repository: R) {}
 
 	async getAll(): Promise<Raw<T>[]> {
