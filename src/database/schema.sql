@@ -16,21 +16,13 @@ CREATE TABLE IF NOT EXISTS admin
 
 CREATE TABLE IF NOT EXISTS rota
 (
-    id      SERIAL PRIMARY KEY UNIQUE,
-    codigo  INT         NOT NULL,
-    origem  VARCHAR(30) NOT NULL,
-    destino VARCHAR(30) NOT NULL,
-    via     VARCHAR(60)
-);
-
-CREATE TABLE IF NOT EXISTS admin_rota
-(
     id       SERIAL PRIMARY KEY UNIQUE,
-    cargo    SMALLINT NOT NULL,
-    admin_id INT      NOT NULL,
-    rota_id  INT      NOT NULL,
-    FOREIGN KEY (admin_id) REFERENCES admin,
-    FOREIGN KEY (rota_id) REFERENCES rota
+    codigo   INT         NOT NULL,
+    origem   VARCHAR(30) NOT NULL,
+    destino  VARCHAR(30) NOT NULL,
+    via      VARCHAR(60),
+    admin_id INT         NOT NULL,
+    FOREIGN KEY (admin_id) REFERENCES admin
 );
 
 CREATE TABLE IF NOT EXISTS feedback
