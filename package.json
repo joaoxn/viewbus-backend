@@ -1,7 +1,7 @@
 {
   "name": "viewbus-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "build": "tsc",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
