@@ -2,13 +2,13 @@ import { DTO, Entity, Raw, Schema } from "datasource/entity/entities";
 import { HttpError } from 'infra/error/error-classes';
 import pool from 'datasource/database/database';
 
-import { Admin } from "datasource/entity/Admin";
-import { Feedback } from "datasource/entity/Feedback";
-import { Partida } from "datasource/entity/Partida";
-import { Ponto } from "datasource/entity/Ponto";
-import { Rota } from "datasource/entity/Rota";
-import { Admin_Rota } from "datasource/entity/Admin_Rota";
-import { Rota_Ponto } from "datasource/entity/Rota_Ponto";
+import Admin from "datasource/entity/Admin";
+import Feedback from "datasource/entity/Feedback";
+import Partida from "datasource/entity/Partida";
+import Ponto from "datasource/entity/Ponto";
+import Rota from "datasource/entity/Rota";
+import Admin_Rota from "datasource/entity/Admin_Rota";
+import Rota_Ponto from "datasource/entity/Rota_Ponto";
 
 const schemas = {
     admin: Admin.schema,

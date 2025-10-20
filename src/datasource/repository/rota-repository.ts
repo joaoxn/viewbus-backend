@@ -1,5 +1,5 @@
 import pool from 'datasource/database/database';
-import { Rota } from "datasource/entity/Rota";
+import Rota from "datasource/entity/Rota";
 import { GenericRepository } from "./generic-repository";
 
 export class RotaRepository extends GenericRepository<Rota> {
@@ -9,7 +9,7 @@ export class RotaRepository extends GenericRepository<Rota> {
 
     async getByAdmin(adminId: number) {
         console.log("TESTINGGGGGGGGGGGG")
-        const result = await pool.query(
+        const result = await pool.query<Rota>(
             `SELECT rota.*
             FROM rota
             INNER JOIN admin_rota ON rota.id = admin_rota.rota_id

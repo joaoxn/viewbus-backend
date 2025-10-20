@@ -1,9 +1,12 @@
+/// <reference path="types/express.d.ts" />
+
 require('dotenv').config();
 
 import express from 'express';
 import {HttpError} from 'infra/error/error-classes';
 
 import {log, loggerLevel, LogLevel} from '@logger';
+import { auth } from 'infra/security/auth';
 import {jsonParser} from 'middleware/jsonParser';
 import {enableLoggedResponses, initRequestLogger} from 'middleware/logs';
 import {errorHandler, jsonParserHandler, listenUnhandledRejections} from 'infra/error/error-handler';
@@ -23,24 +26,22 @@ listenUnhandledRejections();
 const app = express();
 const PORT = process.env.PORT || 8800;
 
-(async () => {
 
-    app.use(jsonParser);
-    app.use(jsonParserHandler);
+app.use(jsonParser);
+app.use(jsonParserHandler);
 
-    app.use(initRequestLogger);
-    app.use(enableLoggedResponses);
-    app.use('/admin', (await AdminRouter.new()).router);
-    app.use('/rota', (await RotaRouter.new()).router);
-    
-    app.all('/{*path}', (req, _res, next) => {
-        next(new HttpError(404, `Router with Path '${req.originalUrl}' Not Found`));
-    });
+app.use(initRequestLogger);
+app.use(enableLoggedResponses);
 
-    app.use(errorHandler);
+app.use('/admin', auth, new AdminRouter().router);
+app.use('/rota', auth, new RotaRouter().router);
 
-    app.listen(PORT, () => {
-        console.log(`Listening on port ${PORT}`);
-    });
+app.all('/{*path}', (req, _res, next) => {
+    next(new HttpError(404, `Router with Path '${req.originalUrl}' Not Found`));
+});
 
-})();
+app.use(errorHandler);
+
+app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`);
+});

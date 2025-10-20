@@ -1,4 +1,4 @@
-import { Admin } from "datasource/entity/Admin";
+import Admin from "datasource/entity/Admin";
 import { GenericService } from "./generic-service";
 import { GenericRepository } from 'datasource/repository/generic-repository';
 

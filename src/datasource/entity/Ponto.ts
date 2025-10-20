@@ -1,7 +1,7 @@
 import { assertPropertiesByValueAndPrimitiveType, DTO, Entity, Schema } from "./entities";
 
 
-export class Ponto extends Entity {
+export default class Ponto extends Entity {
     static readonly tableName = "ponto";
     static schema: Schema<Ponto> = {
         endereco: 'string',

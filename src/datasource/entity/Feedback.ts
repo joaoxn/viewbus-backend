@@ -1,7 +1,7 @@
 import { assertPropertiesByValueAndPrimitiveType, DTO, Entity, Schema } from "./entities";
 
 
-export class Feedback extends Entity {
+export default class Feedback extends Entity {
 
     static readonly tableName = "feedback";
     static schema: Schema<Feedback> = {

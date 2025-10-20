@@ -22,10 +22,10 @@ type ControllerListResponse<T> = Response<HandledRawList<T>>;
 type ControllerResponse<T> = Response<HandledRaw<T>>;
 
 
-export class GenericController<T extends Entity> {
-    constructor(private EntityConstructor: EntityConstructor<T>, protected service: GenericService<T>) {}
+export class GenericController<T extends Entity, S extends GenericService<T> = GenericService<T>> {
+    constructor(private EntityConstructor: EntityConstructor<T>, protected service: S) {}
 
-    idFromPathParams = (req: Request<{ id: string }>, _res: unknown) => {
+    protected idFromPathParams = (req: Request<{ id: string }>, _res: unknown) => {
         const id = Number(req.params.id);
 
         if (isNaN(id)) throw new HttpError(
@@ -36,7 +36,7 @@ export class GenericController<T extends Entity> {
         return id;
     }
 
-    assertValidDTO: (body: Body) => asserts body is DTO<T> = (body: Body) => {
+    protected assertValidDTO: (body: Body) => asserts body is DTO<T> = (body: Body) => {
         try {
             this.EntityConstructor.assertValidDTO(body);
         } catch (err: unknown) {

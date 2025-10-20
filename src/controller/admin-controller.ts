@@ -1,5 +1,5 @@
 import { GenericController } from 'controller/generic-controller';
-import { Admin } from 'datasource/entity/Admin';
+import Admin from 'datasource/entity/Admin';
 
 import { AdminService } from 'service/admin-service';
 
