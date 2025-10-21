@@ -17,3 +17,15 @@
 - `POST /rota` `[Auth]`: Adiciona nova rota, atribuída ao usuário logado;
 - `PUT /rota/:id` `[Auth]`: Altera a rota com `id` fornecido;
 - `DELETE /rota/:id` `[Auth]`: Deleta a rota com `id` fornecido.
+
+### Partida
+- `GET /rota/:id/partidas` `[Public]`: Busca todas as partidas da rota com `id` fornecido;
+- `GET /partida/:id` `[Public]`: Busca a partida com `id` fornecido;
+- `POST /partida` `[Auth]`: Adiciona nova partida, com rota a ser definida no body;
+- `PUT /partida/:id` `[Auth]`: Altera a partida com `id` fornecido;
+- `DELETE /rota/:id` `[Auth]`: Deleta a rota com `id` fornecido.
+
+### Feedback
+- `GET /rota/:id:/feedbacks` `[Public]`: Busca todos os feedbacks da rota com `id` fornecido;
+- `GET /feedback/:id` `[Public]`: Busca o feedback com `id` fornecido;
+- `POST /feedback` `[Auth]`: Adiciona novo feedback, com rota a ser definida no body.
