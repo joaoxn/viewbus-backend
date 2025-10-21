@@ -15,6 +15,8 @@ import { read } from 'utils/files';
 import * as authController from 'controller/auth-controller';
 import * as admin from 'controller/admin';
 import * as rota from 'controller/rota';
+import * as partida from 'controller/partida';
+import * as feedback from 'controller/feedback';
 
 
 dotenv.config();
@@ -40,6 +42,16 @@ app.get('/rota/:id', auth, rota.get);
 app.post('/rota', auth, rota.post);
 app.put('/rota/:id', auth, rota.put);
 app.delete('/rota/:id', auth, rota.remove);
+
+app.get('/rota/:id/partidas', partida.getByRota);
+app.get('/partida/:id', partida.get);
+app.post('/partida', auth, partida.post);
+app.put('/partida/:id', auth, partida.put);
+app.delete('/partida/:id', auth, partida.remove);
+
+app.get('/rota/:id/feedbacks', feedback.getByRota);
+app.get('/feedback/:id', feedback.get);
+app.post('/feedback', auth, feedback.post);
 
 app.all('/{*path}', (req, _res, next) => {
 	next(new HttpError(404, `Router with Path '${req.originalUrl}' Not Found`));

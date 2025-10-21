@@ -42,8 +42,8 @@ export type Partida = {
 export type Feedback = {
 	id: number,
 	avaliacao: number,
-	nome: string,
-	mensagem: string,
+	nome: string | undefined,
+	mensagem: string | undefined,
 	rota_id: number
 }
 
@@ -95,7 +95,7 @@ export function getRotaPonto(req: Request): DTO<Rota_Ponto> {
 	if (typeof rota_id !== 'number' || isNaN(rota_id) || rota_id < 1
 		|| typeof ponto_id !== 'number' || isNaN(ponto_id) || ponto_id < 1)
 		throw new HttpError(400, 
-			'A associação Rota_Ponto precisa ter as propriedades rota_id e ponto_id, ambos números positivos.'
+			'A associação Rota_Ponto precisa ter as propriedades: rota_id e ponto_id, ambos números positivos.'
 		);
 
 	return { rota_id, ponto_id };
@@ -109,10 +109,10 @@ export function getPartida(req: Request): DTO<Partida> {
 
 	if (typeof hora !== 'number' || hora < 0 || hora > 23
 		|| typeof minuto !== 'number' || minuto < 0 || minuto > 59
-		|| typeof dia_semana !== 'number' || dia_semana < 0 || dia_semana > 6
+		|| typeof dia_semana !== 'number' || dia_semana < 1 || dia_semana > 7
 		|| typeof rota_id !== 'number' || isNaN(rota_id) || rota_id < 1)
 		throw new HttpError(400, 
-			'Uma partida precisa ter as propriedades hora, minuto, dia_semana e rota_id válidos.'
+			'Uma partida precisa ter as propriedades: hora, minuto, dia_semana e rota_id válidos.'
 		);
 
 	return { hora, minuto, dia_semana, rota_id };
@@ -120,16 +120,19 @@ export function getPartida(req: Request): DTO<Partida> {
 
 export function getFeedback(req: Request): DTO<Feedback> {
 	const avaliacao = req.body.avaliacao;
-	const nome = req.body.nome;
-	const mensagem = req.body.mensagem;
+	let nome = req.body.nome;
+	let mensagem = req.body.mensagem;
 	const rota_id = req.body.rota_id;
 
+	nome = !nome ? undefined : nome.trim() ? nome.trim() : undefined;
+	mensagem = !mensagem ? undefined : mensagem.trim() ? mensagem.trim() : undefined;
+
 	if (typeof avaliacao !== 'number' || avaliacao < 1 || avaliacao > 5
-		|| typeof nome !== 'string' || nome.trim() === ''
-		|| typeof mensagem !== 'string' || mensagem.trim() === ''
+		|| typeof nome !== 'string' && typeof nome !== 'undefined'
+		|| typeof mensagem !== 'string' && typeof  nome !== 'undefined'
 		|| typeof rota_id !== 'number' || isNaN(rota_id) || rota_id < 1)
 		throw new HttpError(400, 
-			'Um feedback precisa ter as propriedades: avaliacao (1 a 5), nome, mensagem e rota_id válidos.'
+			'Um feedback precisa ter as propriedades: avaliacao (1 a 5), nome (opcional), mensagem (opcional) e rota_id válidos.'
 		);
 
 	return { avaliacao, nome, mensagem, rota_id };

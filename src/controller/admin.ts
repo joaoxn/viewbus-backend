@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import pool from 'database/db';
 import { type Admin, type DTO, getAdmin } from 'database/entities';
 import { HttpError } from 'error/error-classes';
-import express, { type Request, type Response } from 'express';
+import { type Request, type Response } from 'express';
 
 type ShareableAdmin = Omit<Admin, 'senha'>;
 export const getId = (req: Request) => {

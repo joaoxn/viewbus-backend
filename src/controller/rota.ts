@@ -1,9 +1,8 @@
-import bcrypt from 'bcryptjs';
 import * as admin from 'controller/admin';
 import pool from 'database/db';
 import { getRota, type Rota } from 'database/entities';
 import { HttpError } from 'error/error-classes';
-import express, { type Request, type Response } from 'express';
+import { type Request, type Response } from 'express';
 
 const getId = (req: Request) => {
 	const id = Number(req.params.id);

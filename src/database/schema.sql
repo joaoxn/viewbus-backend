@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS feedback
 (
     id        SERIAL PRIMARY KEY UNIQUE,
     avaliacao FLOAT NOT NULL,
-    nome      VARCHAR(100),
-    mensagem  VARCHAR,
+    nome      VARCHAR(100) DEFAULT 'Anônimo',
+    mensagem  VARCHAR(1000),
     rota_id   INT   NOT NULL,
     FOREIGN KEY (rota_id) REFERENCES rota
 );
