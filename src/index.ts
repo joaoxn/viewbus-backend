@@ -42,8 +42,9 @@ app.get('/admin', auth, admin.get);
 app.put('/admin', auth, admin.put);
 app.delete('/admin', auth, admin.remove);
 
-app.get('/rota', auth, rota.getByAdmin);
-app.get('/rota/:id', auth, rota.get);
+app.get('/rota', rota.getAll);
+app.get('/rota/:id', rota.get);
+app.get('/admin/rotas', auth, rota.getByAdmin);
 app.post('/rota', auth, rota.post);
 app.put('/rota/:id', auth, rota.put);
 app.delete('/rota/:id', auth, rota.remove);
@@ -56,7 +57,7 @@ app.delete('/partida/:id', auth, partida.remove);
 
 app.get('/rota/:id/feedbacks', feedback.getByRota);
 app.get('/feedback/:id', feedback.get);
-app.post('/feedback', auth, feedback.post);
+app.post('/feedback', feedback.post);
 
 app.all('/{*path}', (req, _res, next) => {
 	next(new HttpError(404, `Router with Path '${req.originalUrl}' Not Found`));

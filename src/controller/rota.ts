@@ -24,6 +24,16 @@ export const getByAdmin = async (req: Request, res: Response) => {
 		result: rotas
 	});
 }
+
+export const getAll = async (req: Request, res: Response) => {
+	const result = await pool.query<Rota>(`SELECT * FROM rota`);
+	const rotas = result.rows;
+
+	res.status(200).json({
+		message: "Rotas encontradas com sucesso",
+		result: rotas
+	});
+}
 export const get = async (req: Request<{id:string}>, res: Response) => {
 	const id = getId(req);
 
