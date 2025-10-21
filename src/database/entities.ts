@@ -1,3 +1,4 @@
+import { HttpError } from 'error/error-classes';
 import type { Request } from 'express';
 
 export type DTO<T> = Omit<T, 'id'>
@@ -11,10 +12,11 @@ export type Admin = {
 
 export type Rota = {
 	id: number,
-	codigo: number,
+	codigo: string,
 	origem: string,
 	destino: string,
 	via: string | undefined,
+	empresa: string | undefined,
 	admin_id: number
 }
 
@@ -53,37 +55,35 @@ export function getAdmin(req: Request): DTO<Admin> {
 	if (typeof nome !== 'string'
 		|| typeof email !== 'string'
 		|| typeof senha !== 'string')
-		throw new Error(
+		throw new HttpError(400, 
 			'O nome, email e senha são obrigatórios e devem ser strings'
 		);
 	return { nome, email, senha };
 }
 
-export function getRota(req: Request): DTO<Rota> {
+export function getRota(req: Request): Omit<DTO<Rota>, 'admin_id'> {
 	const codigo = req.body.codigo;
 	const origem = req.body.origem;
 	const destino = req.body.destino;
 	const via = req.body.via;
-	const admin_id = req.body.admin_id;
+	const empresa = req.body.empresa;
 
-	if (typeof codigo !== 'number'
+	if (typeof codigo !== 'string'
 		|| typeof origem !== 'string'
 		|| typeof destino !== 'string'
 		|| typeof via !== 'string' && typeof via !== 'undefined'
-		|| typeof admin_id !== 'number'
-		|| isNaN(admin_id)
-		|| admin_id < 1)
-		throw new Error(
-			'Uma rota precisa ter as propriedades: codigo, origem, destino, via e admin_id.'
+		|| typeof empresa !== 'string' && typeof empresa !== 'undefined')
+		throw new HttpError(400, 
+			'Uma rota precisa ter as propriedades: codigo, origem, destino, via (opcional) e empresa (opcional).'
 		);
-	return { codigo, origem, destino, via, admin_id };
+	return { codigo, origem, destino, via, empresa };
 }
 
 export function getPonto(req: Request): DTO<Ponto> {
 	const endereco = req.body.endereco;
 
 	if (typeof endereco !== 'string')
-		throw new Error('O endereço é obrigatório e deve ser uma string.');
+		throw new HttpError(400, 'O endereço é obrigatório e deve ser uma string.');
 
 	return { endereco };
 }
@@ -94,7 +94,7 @@ export function getRotaPonto(req: Request): DTO<Rota_Ponto> {
 
 	if (typeof rota_id !== 'number' || isNaN(rota_id) || rota_id < 1
 		|| typeof ponto_id !== 'number' || isNaN(ponto_id) || ponto_id < 1)
-		throw new Error(
+		throw new HttpError(400, 
 			'A associação Rota_Ponto precisa ter as propriedades rota_id e ponto_id, ambos números positivos.'
 		);
 
@@ -111,7 +111,7 @@ export function getPartida(req: Request): DTO<Partida> {
 		|| typeof minuto !== 'number' || minuto < 0 || minuto > 59
 		|| typeof dia_semana !== 'number' || dia_semana < 0 || dia_semana > 6
 		|| typeof rota_id !== 'number' || isNaN(rota_id) || rota_id < 1)
-		throw new Error(
+		throw new HttpError(400, 
 			'Uma partida precisa ter as propriedades hora, minuto, dia_semana e rota_id válidos.'
 		);
 
@@ -128,7 +128,7 @@ export function getFeedback(req: Request): DTO<Feedback> {
 		|| typeof nome !== 'string' || nome.trim() === ''
 		|| typeof mensagem !== 'string' || mensagem.trim() === ''
 		|| typeof rota_id !== 'number' || isNaN(rota_id) || rota_id < 1)
-		throw new Error(
+		throw new HttpError(400, 
 			'Um feedback precisa ter as propriedades: avaliacao (1 a 5), nome, mensagem e rota_id válidos.'
 		);
 

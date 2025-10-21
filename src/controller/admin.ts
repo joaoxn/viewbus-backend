@@ -1,9 +1,10 @@
 import bcrypt from 'bcryptjs';
 import pool from 'database/db';
-import { getAdmin } from 'database/entities';
+import { type Admin, type DTO, getAdmin } from 'database/entities';
 import { HttpError } from 'error/error-classes';
 import express, { type Request, type Response } from 'express';
 
+type ShareableAdmin = Omit<Admin, 'senha'>;
 export const getId = (req: Request) => {
 	const id = req.user?.id;
 	if (id == undefined) throw new HttpError(400, "No ID Provided");
@@ -12,14 +13,14 @@ export const getId = (req: Request) => {
 export const get = async (req: Request, res: Response) => {
 	const id = getId(req);
 
-	const result = await pool.query<any>(`
+	const result = await pool.query<Admin>(`
 	SELECT * FROM admin WHERE id = $1
 	`, [id]);
 
 	if (result.rowCount == 0)
 		throw new HttpError(404, `Admin with ID ${id} not found`);
 
-	const admin = result.rows[0];
+	const admin: ShareableAdmin & {senha?:string} = result.rows[0];
 	if (admin) delete admin.senha;
 
 	res.status(200).json({
@@ -32,14 +33,14 @@ export const put = async (req: Request, res: Response) => {
 	const adminDTO = getAdmin(req);
 	const senhaCodificada = await bcrypt.hash(adminDTO.senha, 10);
 
-	const result = await pool.query<any>(`
+	const result = await pool.query<Admin>(`
 	UPDATE admin SET nome = $1, email = $2, senha = $3 WHERE id = $4
 	`, [adminDTO.nome, adminDTO.email, senhaCodificada, id]);
 
 	if (result.rowCount == 0)
 		throw new HttpError(404, `Admin with ID ${id} not found`);
 
-	const admin = result.rows[0];
+	const admin: ShareableAdmin & {senha?:string} = result.rows[0];
 	if (admin != undefined)
 		delete admin.senha;
 
@@ -52,14 +53,14 @@ export const put = async (req: Request, res: Response) => {
 export const remove = async (req: Request, res: Response) => {
 	const id = getId(req);
 
-	const result = await pool.query<any>(`
+	const result = await pool.query<Admin>(`
 	DELETE FROM admin WHERE id = $1
 	`, [id]);
 
 	if (result.rowCount == 0)
 		throw new HttpError(404, `Admin with ID ${id} not found`);
 
-	const admin = result.rows[0];
+	const admin: ShareableAdmin & {senha?:string} = result.rows[0];
 	if (admin != undefined)
 		delete admin.senha;
 
