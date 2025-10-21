@@ -18,6 +18,7 @@ import * as admin from 'controller/admin';
 import * as rota from 'controller/rota';
 import * as partida from 'controller/partida';
 import * as feedback from 'controller/feedback';
+import * as ponto from 'controller/ponto';
 
 
 dotenv.config();
@@ -49,6 +50,7 @@ app.post('/rota', auth, rota.post);
 app.put('/rota/:id', auth, rota.put);
 app.delete('/rota/:id', auth, rota.remove);
 
+// TODO: restringir acesso aos endpoints privados apenas aos donos das rotas relacionadas
 app.get('/rota/:id/partidas', partida.getByRota);
 app.get('/partida/:id', partida.get);
 app.post('/partida', auth, partida.post);
@@ -58,6 +60,12 @@ app.delete('/partida/:id', auth, partida.remove);
 app.get('/rota/:id/feedbacks', feedback.getByRota);
 app.get('/feedback/:id', feedback.get);
 app.post('/feedback', feedback.post);
+
+app.get('/rota/:id/pontos', ponto.getByRota);
+app.get('/ponto/:id', ponto.get);
+app.post('/ponto', auth, ponto.post);
+app.put('ponto/:id', auth, ponto.put);
+app.delete('ponto/:id', auth, ponto.remove);
 
 app.all('/{*path}', (req, _res, next) => {
 	next(new HttpError(404, `Router with Path '${req.originalUrl}' Not Found`));

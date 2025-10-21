@@ -88,19 +88,6 @@ export function getPonto(req: Request): DTO<Ponto> {
 	return { endereco };
 }
 
-export function getRotaPonto(req: Request): DTO<Rota_Ponto> {
-	const rota_id = req.body.rota_id;
-	const ponto_id = req.body.ponto_id;
-
-	if (typeof rota_id !== 'number' || isNaN(rota_id) || rota_id < 1
-		|| typeof ponto_id !== 'number' || isNaN(ponto_id) || ponto_id < 1)
-		throw new HttpError(400, 
-			'A associação Rota_Ponto precisa ter as propriedades: rota_id e ponto_id, ambos números positivos.'
-		);
-
-	return { rota_id, ponto_id };
-}
-
 export function getPartida(req: Request): DTO<Partida> {
 	const hora = req.body.hora;
 	const minuto = req.body.minuto;

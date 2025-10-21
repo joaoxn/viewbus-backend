@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS rota_ponto
     id       SERIAL PRIMARY KEY UNIQUE,
     rota_id  INT NOT NULL,
     ponto_id INT NOT NULL,
-    FOREIGN KEY (rota_id) REFERENCES rota,
-    FOREIGN KEY (ponto_id) REFERENCES ponto
+    FOREIGN KEY (rota_id) REFERENCES rota ON DELETE CASCADE,
+    FOREIGN KEY (ponto_id) REFERENCES ponto (id) ON DELETE CASCADE
 );
 
 INSERT INTO admin (nome, email, senha)
