@@ -3,7 +3,7 @@
 import pool from 'database/db';
 import dotenv from 'dotenv';
 import { HttpError } from 'error/error-classes';
-import { errorHandler, jsonParserHandler } from 'error/error-handler';
+import { errorHandler, jsonParserHandler, listenUnhandledRejections } from 'error/error-handler';
 import jsonParser from 'middleware/jsonParser';
 import express from 'express';
 
@@ -23,6 +23,8 @@ import * as feedback from 'controller/feedback';
 dotenv.config();
 
 logger.loggerLevel(LogLevel.INFO);
+
+listenUnhandledRejections();
 
 const app = express();
 
