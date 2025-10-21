@@ -1,5 +1,6 @@
 /// <reference path="types/express.d.ts" />
 
+import pool from 'database/db';
 import dotenv from 'dotenv';
 import { HttpError } from 'error/error-classes';
 import { errorHandler } from 'error/error-handler';
@@ -12,6 +13,7 @@ import { enableLoggedResponses, initRequestLogger } from 'middleware/logs';
 
 import * as authController from 'controller/auth-controller';
 import * as admin from 'controller/admin';
+import { read } from 'utils/files';
 
 dotenv.config();
 
@@ -41,3 +43,9 @@ const PORT = process.env.PORT || 8800;
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+
+(async ()=> {
+    await pool.query(
+        await read<string>('src/database/schema.sql', (x)=>x)
+    )
+})()
