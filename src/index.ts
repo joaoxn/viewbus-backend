@@ -3,7 +3,8 @@
 import pool from 'database/db';
 import dotenv from 'dotenv';
 import { HttpError } from 'error/error-classes';
-import { errorHandler } from 'error/error-handler';
+import { errorHandler, jsonParserHandler } from 'error/error-handler';
+import jsonParser from 'middleware/jsonParser';
 import express from 'express';
 
 import * as logger from 'express-logger-functions';
@@ -25,7 +26,9 @@ logger.loggerLevel(LogLevel.INFO);
 
 const app = express();
 
-app.use(express.json());
+app.use(jsonParser);
+app.use(jsonParserHandler);
+
 app.use(initRequestLogger);
 app.use(enableLoggedResponses);
 
